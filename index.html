@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ATLAS — Legal Knowledge Workspace</title>
+
+    <!-- Charter typography: Cormorant Garamond (display), Inter (UI), IBM Plex Mono (references) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=Inter:opsz,wght@14..32,400..600&display=swap" rel="stylesheet">
+
+    <style>
+      /* ═══════════ CHARTER COLOURS ═══════════ */
+      :root {
+        --parchment: #F4EEE5;
+        --archive-sand: #EBE4D9;
+        --app-white: #F7F9FA;
+        --stone-grey: #DADDE1;
+        --graphite: #4F5963;
+        --navy: #1D3442;
+        --observatory: #35586B;
+        --atlantic: #4E7D92;
+        --glacier: #C8DCE3;
+        --mist: #EAF2F5;
+        --champagne: #B58A3A;
+
+        --ink: #101820;
+        --panel-bg: #FFFFFF;
+        --shadow: 0 8px 28px rgba(29, 52, 66, 0.08);
+        --shadow-hover: 0 14px 38px rgba(29, 52, 66, 0.12);
+
+        /* Charter typography stack */
+        --serif-display: "Cormorant Garamond", "Times New Roman", Times, serif;
+        --sans-ui: "Inter", system-ui, -apple-system, sans-serif;
+        --mono-ref: "IBM Plex Mono", ui-monospace, monospace;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        background: var(--app-white);
+        color: var(--graphite);
+        font-family: var(--sans-ui);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a { color: inherit; text-decoration: none; }
+      button, input { font: inherit; }
+
+      /* ═══════════ LAYOUT ═══════════ */
+      .app {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 288px minmax(0, 1fr);
+      }
+
+      /* ═══════════ SIDEBAR — Atlas Navy ═══════════ */
+      .sidebar {
+        background: var(--navy);
+        color: #EAF2F5;
+        padding: 32px 24px 28px;
+        min-height: 100vh;
+        position: sticky;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 32px;
+      }
+
+      .brand-logo {
+        width: 42px;
+        height: 42px;
+        object-fit: contain;
+        filter: drop-shadow(0 2px 6px rgba(181, 138, 58, 0.25));
+      }
+
+      .brand h1 {
+        font-family: var(--serif-display);
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        color: #FFFFFF;
+        line-height: 1.1;
+      }
+
+      .brand p {
+        font-family: var(--sans-ui);
+        font-size: 12px;
+        color: var(--glacier);
+        margin-top: 2px;
+        letter-spacing: 0.01em;
+      }
+
+      .nav-section {
+        margin-bottom: 22px;
+      }
+
+      .nav-title {
+        font-family: var(--mono-ref);
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--atlantic);
+        margin-bottom: 10px;
+        padding-left: 2px;
+      }
+
+      .side-link {
+        display: grid;
+        grid-template-columns: 32px 1fr;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        color: var(--glacier);
+        font-size: 14px;
+        font-weight: 450;
+        transition: background 0.15s ease, color 0.15s ease;
+        margin-bottom: 4px;
+      }
+
+      .side-link:hover {
+        background: var(--observatory);
+        color: #FFFFFF;
+      }
+
+      .side-link.active {
+        background: var(--observatory);
+        color: #FFFFFF;
+        border-left: 3px solid var(--champagne);
+        border-radius: 0 8px 8px 0;
+        margin-left: -24px;
+        padding-left: 33px;
+      }
+
+      .step {
+        width: 26px;
+        height: 26px;
+        border: 1px solid var(--atlantic);
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-family: var(--mono-ref);
+        font-size: 12px;
+        color: var(--glacier);
+      }
+
+      .side-link.active .step {
+        border-color: var(--champagne);
+        color: var(--champagne);
+      }
+
+      .sidebar-principle {
+        margin-top: auto;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.04);
+        border-left: 3px solid var(--champagne);
+        border-radius: 0 6px 6px 0;
+      }
+
+      .sidebar-principle strong {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #FFFFFF;
+      }
+
+      .sidebar-principle span {
+        display: block;
+        margin-top: 6px;
+        font-size: 12px;
+        color: var(--glacier);
+        line-height: 1.55;
+      }
+
+      /* ═══════════ MAIN ═══════════ */
+      .main {
+        min-width: 0;
+        padding: 36px 40px 48px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+      }
+
+      .eyebrow {
+        font-family: var(--mono-ref);
+        font-size: 11px;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--atlantic);
+        margin-bottom: 8px;
+      }
+
+      .topbar h2 {
+        font-family: var(--serif-display);
+        font-size: 36px;
+        font-weight: 500;
+        color: var(--navy);
+        line-height: 1.15;
+        margin-bottom: 8px;
+      }
+
+      .topbar p {
+        max-width: 580px;
+        color: var(--graphite);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .search {
+        min-width: 280px;
+        max-width: 360px;
+        flex-shrink: 0;
+      }
+
+      .search input {
+        width: 100%;
+        border: 1px solid var(--stone-grey);
+        background: var(--panel-bg);
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 14px;
+        color: var(--navy);
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .search input::placeholder {
+        color: #9BA7B0;
+      }
+
+      .search input:focus {
+        border-color: var(--atlantic);
+        box-shadow: 0 0 0 3px rgba(78, 125, 146, 0.12);
+      }
+
+      /* ═══════════ METRICS ═══════════ */
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 24px;
+      }
+
+      .metric {
+        background: var(--panel-bg);
+        border: 1px solid var(--stone-grey);
+        border-radius: 10px;
+        padding: 18px 20px;
+        box-shadow: var(--shadow);
+      }
+
+      .metric span {
+        display: block;
+        font-size: 12px;
+        color: var(--graphite);
+        font-family: var(--mono-ref);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .metric strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 26px;
+        font-weight: 600;
+        color: var(--navy);
+        font-family: var(--sans-ui);
+      }
+
+      /* ═══════════ DASHBOARD ═══════════ */
+      .dashboard {
+        display: grid;
+        grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.9fr);
+        gap: 20px;
+        align-items: start;
+      }
+
+      /* ═══════════ PANELS ═══════════ */
+      .panel {
+        background: var(--panel-bg);
+        border: 1px solid var(--stone-grey);
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .panel h3 {
+        font-family: var(--serif-display);
+        font-size: 22px;
+        font-weight: 500;
+        color: var(--navy);
+        margin-bottom: 8px;
+      }
+
+      .panel p {
+        color: var(--graphite);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .panel + .panel {
+        margin-top: 20px;
+      }
+
+      /* ═══════════ UPLOAD ZONE ═══════════ */
+      .upload-zone {
+        margin-top: 18px;
+        border: 1px dashed var(--champagne);
+        background: linear-gradient(180deg, #FFFCF5, #FFFFFF);
+        border-radius: 10px;
+        padding: 22px 24px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .upload-zone strong {
+        display: block;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--navy);
+      }
+
+      .upload-zone span {
+        display: block;
+        margin-top: 6px;
+        color: var(--graphite);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .file-input {
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+
+      .file-input input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      /* ═══════════ BUTTONS ═══════════ */
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        border-radius: 8px;
+        padding: 10px 18px;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: var(--sans-ui);
+        cursor: pointer;
+        border: none;
+        background: var(--navy);
+        color: #FFFFFF;
+        transition: background 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .button:hover {
+        background: var(--observatory);
+        box-shadow: 0 4px 14px rgba(29, 52, 66, 0.18);
+      }
+
+      .file-status {
+        margin-top: 12px;
+        font-family: var(--mono-ref);
+        font-size: 12px;
+        color: var(--atlantic);
+      }
+
+      /* ═══════════ CORPUS GRID ═══════════ */
+      .corpus-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 18px;
+      }
+
+      .corpus-card {
+        background: var(--panel-bg);
+        border: 1px solid var(--stone-grey);
+        border-radius: 10px;
+        padding: 20px;
+        min-height: 170px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .corpus-card:hover {
+        border-color: var(--atlantic);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .corpus-card.available {
+        border-color: var(--champagne);
+        border-width: 1px;
+      }
+
+      .corpus-card h4 {
+        font-family: var(--serif-display);
+        font-size: 20px;
+        font-weight: 500;
+        color: var(--navy);
+        margin-bottom: 6px;
+      }
+
+      .corpus-card p {
+        font-size: 13px;
+        color: var(--graphite);
+        line-height: 1.5;
+      }
+
+      .card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 16px;
+        font-family: var(--mono-ref);
+        font-size: 11px;
+        color: var(--graphite);
+      }
+
+      /* ═══════════ STATUS BADGES ═══════════ */
+      .status-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-family: var(--mono-ref);
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.03em;
+      }
+
+      .status-badge.active {
+        background: #E8F3F0;
+        color: #2F7773;
+      }
+
+      .status-badge.coming {
+        background: var(--glacier);
+        color: var(--observatory);
+      }
+
+      .status-badge.planned {
+        background: var(--mist);
+        color: var(--graphite);
+      }
+
+      .status-badge.in-force {
+        background: #FFF4DC;
+        color: var(--champagne);
+      }
+
+      /* ═══════════ RIGHT STACK ═══════════ */
+      .right-stack {
+        display: grid;
+        gap: 20px;
+      }
+
+      .path-list,
+      .roadmap-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .path,
+      .roadmap-item {
+        border: 1px solid var(--stone-grey);
+        border-radius: 8px;
+        padding: 14px 16px;
+        background: #FAFBFC;
+      }
+
+      .path strong,
+      .roadmap-item strong {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--navy);
+      }
+
+      .path span,
+      .roadmap-item span {
+        display: block;
+        margin-top: 4px;
+        font-size: 13px;
+        color: var(--graphite);
+        line-height: 1.5;
+      }
+
+      .roadmap-item.done {
+        background: #F8FAF9;
+        border-color: #D0E4DC;
+      }
+
+      .roadmap-item.done strong::before {
+        content: "✓ ";
+        color: #2F7773;
+        font-family: var(--mono-ref);
+      }
+
+      .roadmap-item.current strong::before {
+        content: "→ ";
+        color: var(--champagne);
+        font-family: var(--mono-ref);
+      }
+
+      /* ═══════════ FOOTER ═══════════ */
+      .workspace-footer {
+        margin-top: 32px;
+        padding: 16px 20px;
+        background: var(--navy);
+        border-radius: 10px;
+        text-align: center;
+      }
+
+      .workspace-footer span {
+        font-family: var(--mono-ref);
+        font-size: 11px;
+        letter-spacing: 0.05em;
+        color: var(--glacier);
+      }
+
+      .workspace-footer .gold-dot {
+        color: var(--champagne);
+      }
+
+      /* ═══════════ RESPONSIVE ═══════════ */
+      @media (max-width: 1100px) {
+        .app {
+          grid-template-columns: 250px minmax(0, 1fr);
+        }
+
+        .dashboard {
+          grid-template-columns: 1fr;
+        }
+
+        .corpus-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .metrics {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 780px) {
+        .app {
+          display: block;
+        }
+
+        .sidebar {
+          position: static;
+          min-height: auto;
+          padding: 20px;
+        }
+
+        .side-link.active {
+          margin-left: 0;
+          padding-left: 12px;
+          border-radius: 8px;
+          border-left: none;
+          background: var(--observatory);
+        }
+
+        .main {
+          padding: 20px;
+        }
+
+        .topbar {
+          display: block;
+        }
+
+        .topbar h2 {
+          font-size: 28px;
+        }
+
+        .search {
+          margin-top: 16px;
+          max-width: none;
+        }
+
+        .upload-zone {
+          grid-template-columns: 1fr;
+        }
+
+        .metrics {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .corpus-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+
+      <!-- ═══════════ SIDEBAR — Atlas Navy ═══════════ -->
+      <aside class="sidebar">
+        <div class="brand">
+          <img class="brand-logo" src="assets/main_logo.png" alt="ATLAS logo">
+          <div>
+            <h1>ATLAS</h1>
+            <p>Knowledge Operating System</p>
+          </div>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-title">Workspace</div>
+          <a class="side-link active" href="index.html">
+            <span class="step">1</span><span>Library</span>
+          </a>
+          <a class="side-link" href="#upload">
+            <span class="step">2</span><span>Import</span>
+          </a>
+          <a class="side-link" href="#paths">
+            <span class="step">3</span><span>Study paths</span>
+          </a>
+          <a class="side-link" href="#learning">
+            <span class="step">4</span><span>Learning layer</span>
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-title">Corpus</div>
+          <a class="side-link" href="documents/gdpr.html">
+            <span class="step">⚖</span><span>GDPR</span>
+          </a>
+          <a class="side-link" href="#" style="opacity:0.5; pointer-events:none;">
+            <span class="step">🏛</span><span>French Const.</span>
+          </a>
+          <a class="side-link" href="#" style="opacity:0.5; pointer-events:none;">
+            <span class="step">📜</span><span>US Const.</span>
+          </a>
+        </div>
+
+        <div class="sidebar-principle">
+          <strong>Source truth first</strong>
+          <span>No legal reasoning without source traceability. AI and ML sit above structured documents, citations, and verified anchors.</span>
+        </div>
+      </aside>
+
+      <!-- ═══════════ MAIN WORKSPACE ═══════════ -->
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Legal Knowledge Workspace</p>
+            <h2>Understand law beyond the text.</h2>
+            <p>Upload, read, annotate, and connect legal materials for international trade, business law, international law, and domestic law — grounded in authoritative sources.</p>
+          </div>
+          <label class="search">
+            <input id="workspaceSearch" type="search" placeholder="Search corpus, concepts, institutions…">
+          </label>
+        </header>
+
+        <!-- Metrics -->
+        <section class="metrics" aria-label="Workspace metrics">
+          <div class="metric"><span>Available Corpus</span><strong>1</strong></div>
+          <div class="metric"><span>Seed Articles</span><strong>12</strong></div>
+          <div class="metric"><span>Reading Modes</span><strong>4</strong></div>
+          <div class="metric"><span>Import Types</span><strong>PDF TXT HTML</strong></div>
+        </section>
+
+        <!-- Dashboard -->
+        <section class="dashboard">
+          <div>
+            <!-- Upload / Import -->
+            <section class="panel" id="upload">
+              <p class="eyebrow">Import Desk</p>
+              <h3>Upload legal text or source files</h3>
+              <p>Drop <code style="font-family:var(--mono-ref); font-size:13px;">.pdf</code>, <code style="font-family:var(--mono-ref); font-size:13px;">.txt</code>, or official legal <code style="font-family:var(--mono-ref); font-size:13px;">.html</code> sources. In the static prototype, upload is a UI specimen. In production, this becomes the ingestion pipeline: extract structure, preserve source anchors, identify concepts, and create a study workspace.</p>
+
+              <div class="upload-zone">
+                <div>
+                  <strong>Drop a legal document into ATLAS</strong>
+                  <span>Accepted long-term: PDF, TXT, HTML, DOCX. First production target: official HTML when available, because it preserves legal structure better than PDFs.</span>
+                  <div class="file-status" id="fileStatus">No file selected.</div>
+                </div>
+                <label class="file-input button">
+                  Choose file
+                  <input id="fileInput" type="file" accept=".pdf,.txt,.html,.htm,.docx">
+                </label>
+              </div>
+            </section>
+
+            <!-- Corpus Library -->
+            <section class="panel" style="margin-top:20px;">
+              <p class="eyebrow">Corpus Library</p>
+              <h3>Available workspaces</h3>
+              <div class="corpus-grid" id="corpusGrid">
+                <a class="corpus-card available" href="documents/gdpr.html" data-search="gdpr european union privacy data protection trade business regulation">
+                  <div>
+                    <h4>GDPR</h4>
+                    <p>Regulation (EU) 2016/679. Foundation corpus for data protection, digital trade, compliance, rights, and business risk.</p>
+                  </div>
+                  <div class="card-footer">
+                    <span class="status-badge active">Open workspace</span>
+                    <span>EU · 2016</span>
+                  </div>
+                </a>
+
+                <article class="corpus-card" data-search="french constitution domestic law france institutions constitutional">
+                  <div>
+                    <h4>French Constitution</h4>
+                    <p>Next domestic-law test corpus for institutions, constitutional hierarchy, rights, and state structure.</p>
+                  </div>
+                  <div class="card-footer">
+                    <span class="status-badge coming">Coming next</span>
+                    <span>FR</span>
+                  </div>
+                </article>
+
+                <article class="corpus-card" data-search="us constitution united states constitutional federal rights">
+                  <div>
+                    <h4>US Constitution</h4>
+                    <p>Future comparative-law corpus for federal powers, amendments, institutions, and constitutional interpretation.</p>
+                  </div>
+                  <div class="card-footer">
+                    <span class="status-badge planned">Planned</span>
+                    <span>US</span>
+                  </div>
+                </article>
+
+                <article class="corpus-card" data-search="wto international trade business import export">
+                  <div>
+                    <h4>Trade Law Pack</h4>
+                    <p>Future international trade workspace for WTO rules, customs, import/export, and business obligations.</p>
+                  </div>
+                  <div class="card-footer">
+                    <span class="status-badge planned">Planned</span>
+                    <span>INTL</span>
+                  </div>
+                </article>
+              </div>
+            </section>
+          </div>
+
+          <!-- Right stack -->
+          <aside class="right-stack">
+            <!-- Study Paths -->
+            <section class="panel" id="paths">
+              <p class="eyebrow">Study Paths</p>
+              <h3>What ATLAS helps you study</h3>
+              <div class="path-list">
+                <div class="path">
+                  <strong>Data protection & digital trade</strong>
+                  <span>GDPR, AI regulation, cross-border transfers, controllers, processors, liability.</span>
+                </div>
+                <div class="path">
+                  <strong>Constitutional foundations</strong>
+                  <span>Institutions, rights, hierarchy of norms, public authority, comparative frameworks.</span>
+                </div>
+                <div class="path">
+                  <strong>Business regulation</strong>
+                  <span>Obligations, sanctions, operational risks, compliance workflows across jurisdictions.</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- ML Roadmap -->
+            <section class="panel" id="learning">
+              <p class="eyebrow">Machine Learning Roadmap</p>
+              <h3>Learning layer, later</h3>
+              <p style="margin-bottom:14px;">ATLAS becomes machine-learning aware only after the source model is reliable. The future learning layer will learn from structured documents, user notes, concept links, and verified citations — not from unsourced generation.</p>
+              <div class="roadmap-list">
+                <div class="roadmap-item done">
+                  <strong>Structured memory</strong>
+                  <span>Articles, paragraphs, annotations, bookmarks, concepts, source anchors.</span>
+                </div>
+                <div class="roadmap-item current">
+                  <strong>Source traceability & notes</strong>
+                  <span>Stable IDs, citation discipline, user notes grounded in document anchors.</span>
+                </div>
+                <div class="roadmap-item">
+                  <strong>Concept linking</strong>
+                  <span>Connect legal concepts across articles, documents, and jurisdictions.</span>
+                </div>
+                <div class="roadmap-item">
+                  <strong>Retrieval intelligence</strong>
+                  <span>Semantic search and embeddings to find relevant source units without inventing facts.</span>
+                </div>
+                <div class="roadmap-item">
+                  <strong>Personal study model</strong>
+                  <span>Adapt revision prompts to what the student reads, saves, misunderstands, and revisits.</span>
+                </div>
+              </div>
+            </section>
+          </aside>
+        </section>
+
+        <!-- Footer -->
+        <footer class="workspace-footer">
+          <span><span class="gold-dot">●</span> No legal reasoning without source traceability. ATLAS is a knowledge operating system, not an AI lawyer.</span>
+        </footer>
+      </main>
+    </div>
+
+    <script>
+      const fileInput = document.getElementById("fileInput");
+      const fileStatus = document.getElementById("fileStatus");
+      const search = document.getElementById("workspaceSearch");
+      const cards = Array.from(document.querySelectorAll("[data-search]"));
+
+      fileInput.addEventListener("change", event => {
+        const file = event.target.files[0];
+        fileStatus.textContent = file
+          ? `${file.name} selected. Ingestion pipeline not connected yet.`
+          : "No file selected.";
+      });
+
+      search.addEventListener("input", event => {
+        const query = event.target.value.trim().toLowerCase();
+        cards.forEach(card => {
+          const haystack = `${card.textContent} ${card.dataset.search}`.toLowerCase();
+          card.style.display = haystack.includes(query) ? "" : "none";
+        });
+      });
+    </script>
+  </body>
+</html>
